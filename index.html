@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unfollowing List</title>
+    <style>
+        /* Basic Reset and Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #262626;
+            margin-bottom: 25px;
+        }
+
+        /* Search Bar Styling */
+        #searchBar {
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #dbdbdb;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* List Styling */
+        #userList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .user-item:last-child {
+            border-bottom: none;
+        }
+
+        .username {
+            font-weight: 500;
+            font-size: 15px;
+            color: #262626;
+        }
+
+        /* Button Styling (Simulated Unfollow) */
+        .unfollow-btn {
+            background-color: #efefef; /* Light grey, typical "Following" color on Instagram */
+            color: #262626;
+            border: 1px solid #dbdbdb;
+            padding: 6px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s, border-color 0.2s;
+            font-size: 13px;
+            text-decoration: none; /* Make it look like a button but act as a link */
+            display: inline-block;
+        }
+
+        .unfollow-btn:hover {
+            background-color: #dbdbdb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Your Unfollowing List 👀</h1>
+    <input type="text" id="searchBar" onkeyup="searchUsers()" placeholder="Search usernames...">
+
+    <ul id="userList">
+        </ul>
+</div>
+
+<script>
+    // 1. Your provided list of usernames
+    const usernames = [
+        "jstt.ciianaa", "_.achuzz_z._", "__fidhaa_____________", "cat__xm", "crabox_",
+        "metafordevelopers", "yasirysr47", "moidheen.fr", "eco.peedika", "gurukkal_official",
+        "thoughtcatalog", "ibm", "amazon", "__deleted__bhiebefeggibbgaib", "mulearn.official",
+        "shaangeo", "rgpdiaries", "shaz.dev_", "doctor.chrome", "sentences.from.movies",
+        "randomdiaries.__", "evolving.ai", "theartificialintelligence", "ott.updates._",
+        "perpl.p1uto", "annahelmrich", "ansha.dha.__", "za_hn_n_", "wecodemalayalam",
+        "meta.ai", "i.gads", "arunsmokigarage", "legundarycustom", "autonity.in",
+        "khayaal.band", "autisticsaranh", "nthngprsnlluxe", "darwin_bhaskar", "ufcindia",
+        "cyra_tech.accelerator", "safa.college.official", "cherrysin98", "optimalcoding",
+        "onechampionship", "umerkarippol", "daaneeeyyyy", "abu_zahad_limrah", "_rehhaann___",
+        "lockerroom_in", "ufc", "__.ramsshiii.__", "aslam_mohd7", "rennahh.__",
+        "rishhaa_a", "__deleted__bhiebebibigghaiaa", "pubity", "zuck", "agniv_2018",
+        "whos.abiyh", "cinema.stellar", "microsoftlife", "user_shamee", "root._media",
+        "nishuu.cx", "anant96_", "shinchan_uff07", "faris__root", "4rshad________",
+        "_nihala_sheri", "cyra_learnings", "sana.mhrin_", "lathuz__", "malayalamtechofficial",
+        "coders.learning", "si_l_la_l_al_i_ch_a_n_", "shahdya.siddiq", "rii_nshahh",
+        "_gangaa.a", "sanhah.hh", "aleena_saju__", "figma", "v_rn_ve", "sip_unit.safa",
+        "brototype.malayalam", "_shahulll__", "a_slam__aslu", "mallu_coding", "mhd_sala_",
+        "f4vx_._", "debugmedia", "ra_see_na_x", "_coding_hub__", "limra_martialarts_koppam",
+        "yasseeerah", "y.not.bsw", "samalt___", "dada.duniyaa", "ascentstore.in",
+        "students.of.safa", "irshu__z.x", "braindorado", "sheareeyy", "tbhmedia.in",
+        "rayyyhhan._", "cinemagic.official", "dot.bca", "philip_mampad", "_jubair_muhd_",
+        "teslagomars", "namn.dev_", "parvathimohandas_", "_limra_academy_", "safa_college",
+        "aaa.diilll", "ambitious.player", "aswa.nyh", "_rxfaa._", "thescishow",
+        "khushi_aneja_9784", "deepcodes._", "kurzgesagt", "rifanahh._", "signmark.ads",
+        "ftm.shabaana", "rahul.ai.dev", "_bca_memes_official", "r4__h.o.p", "offensoacademy",
+        "_an_ujaah", "imangadzhireels", "akshaythestoryteller", "__h.a.m.d.a.n._007",
+        "rai_za_na_", "space_of_oblivion", "shemuzzz6", "s_a_f_w_a_n_0_0_7", "braanthante_lokam",
+        "varikalofficial", "saamshafeeq", "_jefreena", "andersonharan", "ran_jiths_km",
+        "ivannicholo", "higherv1be", "awakingforce", "kkaayooss", "iamemilioortiz",
+        "thedeathalchemist", "andrea_laing_official", "nicwarner", "theloveartist",
+        "openminded.truthseekers.only", "n.edha__", "lorrainesorlet", "ladytist",
+        "josephannamkutty", "umerabdussalam", "psych2go_tips", "wordsgasm_",
+        "charliemackesy", "huwge.growth", "alyssamariewellness", "jb.writer",
+        "earlyriserstudio", "wearethenew", "betterme.mental_health", "bekind.dogood",
+        "kindnessorg", "thekindstrangerproject", "kindnesstheuniversalanguage",
+        "smart.nonsense", "whatsgoodtoday.news", "db_coursestrategies", "yung_pueblo",
+        "zannakeithley", "joshuatongol", "theresnoreality", "the.alchemist", "muf.eeda_",
+        "shibil_.vp", "alwincleatus", "millionaire.dream", "theclassypeople", "thegoodquote",
+        "motivation_mondays", "successblueprint", "before5am", "mindsetofgreatness",
+        "ambitioncircle", "secrets2success", "wealth", "shredded_life_", "addicted2success",
+        "the.success.club", "foundr", "motivationmafia", "actingonadream",
+        "know_thyself_podcast", "nicolewalkerlmhc", "kelley.cama", "matt_cama",
+        "tealswanofficial", "growwithcolby", "ash.lmb", "tanoseihito", "therossharkness",
+        "thedankoe", "moismai", "navalsarchive", "salvaveritateofficial", "here_.iamm",
+        "_n_andan_a__", "yn.xz__", "espn", "joshterryplays", "golimitlesss",
+        "recovering.overthinker", "fidhaeii._", "americanbaron", "wingai.dating",
+        "thequotes_feed", "richroll", "visualtheory_", "mentalistaathi", "juliandemedeiros",
+        "innerlifewith_asha", "klr_productions", "cuddling_lover4193", "thescrawledfeelings",
+        "rizmango", "dianacooperangels", "lorinkrenn", "ttt_official", "wordaaddict_",
+        "skycaveretreats", "christosavatartv", "gflstation", "dhilkrishnadk", "byron.katie",
+        "thequeenkollective", "rupertspira", "bamazed.life", "nasa", "google", "_ha_nn_a_h_",
+        "github", "anshida___ftm", "_javada__", "riyana.nazar", "adila__nasrin14",
+        "ssnhaa.t", "sanil9205", "_safna_._safu_", "yaxmeeei", "aay.xsh", "casac_benjali",
+        "irfaaaan.___00", "_thah_sina", "mishab__mishab", "shibilyy____", "neethuu.hh",
+        "ashiffffffffff", "fi.dh.ahh__", "nasila_binth_jalal", "hibaah.shrn", "riiidhaaa.__",
+        "n66ru", "niyaaahnaaaa", "fi_dh_a", "navaneeth_leooo", "mr_vampire_.__",
+        "mr__w_i_c_k_", "_mu_shryy_", "hibxaaah", "sabeena_bint_abdhulmajeed", "_ai_fuz_z124",
+        "rafna__ah_", "sinx._z", "anjanaaa.k", "the_dope___", "businessinsider",
+        "meilliurs_amis", "minshida.__", "_ri.shhah", "solivagant924", "ajith___xxi",
+        "soudha_sulfikar", "_shahadshann", "hhshd2495", "za_f_ar_exf", "moh_d_shahal_",
+        "cherish.frames", "ashiqqh._", "niihuuuu", "_nabeel___ali", "gouri.m.p",
+        "_jet__service_", "iam_peush", "iam.__.abhijith", "nixzaaa.__", "_psycore.___",
+        "sree__efx__", "mr_blacksoul_46____", "_.viii.jyyyy._", "_a1.ok", "shanii.sv",
+        "arun_tx_", "_h4.ximmm", "why_rishhh", "niikkxzz", "sanju_tolly_jozfe",
+        "yadhu_krishnan.b", "bishal_adhikary23", "fir_osb123", "supersantyy", "alanlal_19",
+        "shina_xxi", "lancer_x2_8", "a_noo_p_27", "naja_vk", "saaaaf.___", "network_crasher",
+        "thowffy", "cl__me__acchu__007", "naviiiiien", "s_a_y_a_n_d_h_", "i.jeon__",
+        "a.rathyy_", "a_d_ar__s_h", "they___call___me___sultan___20", "susma_siluvai",
+        "ashik._.4.20", "__z.reya__", "xo__spirit", "heynekan_jet", "yadunand.vk",
+        "sanvin_sajan_", "ajmal___ak", "sharafu_dhee", "nibin._", "_samyukthahh__",
+        "suhhaaiill._", "_crown_333", "maanass.p", "amruthachandran__", "balumohan1997",
+        "pa_v_i_7", "shahzzall_", "hiilaa.all", "nir_shad__", "lakshmiii.krishnaaa",
+        "_amu.____", "arif.kalladi", "the_sky__laper____76_", "_the_eagle_one_",
+        "mohd._bazid", "shmllshh", "cth_althaaaf", "_nand.h.u", "shahabazey", "itslalhere_",
+        "pulserboy82", "mrs__frell", "theyenvy.athul", "shirzzzz__", "vibinrampally",
+        "zu_b_inn_03", "aalanjohnsonn", "sfi_cnc_", "shxba.na_", "mr._silex_",
+        "vimal_ps_", "_ichuuo1", "aj__ith__", "_eza_maria_christ_", "foodie_guy_47___",
+        "sreehari.smadhu_", "nikh__lln11", "bibinhh._0", "the_orange_viper_93",
+        "mun_zz_r_", "xatoi.x", "sh_killadi____xo", "sam__6", "itz_me_sarigaa_",
+        "archz.nah_", "fa.yaahh", "_sivgng.ee", "jo_el_pauly", "naxiaamm",
+        "nanda.kishorrr_", "_fidha_zyd", "_deviinandana._", "moto__throttler_",
+        "sydu.uu", "ha.nnaahh.__", "muhcinmt", "_aslieee._", "rinshaad_8", "muzzaammiil",
+        "_asnn.a_", "akshayy__offl", "_ashik___", "arunkachu9942022", "neerajtp_",
+        "_abhxiii____", "missmunu263", "akhil_sharma_8801", "s__aidali._", "anzi_apz",
+        "_lucky_minesh_13", "_ame____g_", "_so_ph_y_", "khadixaah", "_fidhqq__",
+        "hnna.aa_", "_fi_dha_cozz", "nishad.sha.3950", "midlaj_.midhu__", "its_a.p.p.u_",
+        "niiyas.ak", "ft.__shilna._", "ftm.shrfaa", "_aslam____x", "_joelh._",
+        "mu_naw4r", "jazeel.abdulla", "the__tobee", "arunhhh._", "kaarthu_kaarthika",
+        "sumiiiiiii_x", "_highontravels_", "sa._diq__", "san_____46", "akshay__raj__._",
+        "mohd_s.iinan", "infini__te", "valumakrii", "ft.shinan", "u_n_n_i_078",
+        "iam_thejus_137", "asw_vn", "aashykk", "aromallllll._", "fahad__2575__",
+        "minhajj_j", "_ju_naid_dx__", "joseph_k_koshy", "_appus___03", "aamaal.l",
+        "rufayy_d", "minshaaaj", "k_u_t_t_u_x3_", "_an_ar_gha", "fa_thi_ima_jaf",
+        "__vixhnu.___", "officialmohanlalfansclub", "_akhil_akz_", "famillhh_",
+        "the__real_ak_", "shiinaas__", "nizafathyy", "_shivani_vijayan_", "m.shbllyyy.___",
+        "prnvv.v", "phonic_._", "ajayyy._y", "akasshh.__", "_k_ir_an", "_helly_bo",
+        "__xthiii", "ahmdmubshir", "abhiraj_ramachandran", "kasarago_d_",
+        "fayiz_muhammed____", "photo_frames_gifts_", "ramjithbekal", "msbilal4498",
+        "_moon_light___07", "s__ad_ik___96", "jimshadsonu1", "the__cru__zar__boy",
+        "nachu_212", "hyper.oid", "fasil_muhamed", "al.mubarkk", "riiishadd_",
+        "_jesyyyyyyyy.___", "_pic_ardo", "_f_arshad__", "jinaa_fans_pcc", "_mohd___shiyas_ep",
+        "althaf___x98", "__.achuoohh", "__jinana_jinz__", "shhamila_", "riiihhan_mtt",
+        "fthm.nyma", "nassaleeyy", "sheb_.in", "adhi_.y", "she.hiii._", "nishva.rasheed",
+        "_rny.h_", "jj.umanaa", "afiiiy__", "ft.saanah_", "adnanvailassery", "_n4jmal_93",
+        "_mhd_hakeem_", "aslabyyy", "khadeejaah_sidhik", "sahaxl._", "fars.sanaaa",
+        "irfana_rifuzz", "_najiya_jalal_", "_asifa0_0", "n_e_y_m_r_10_", "a.nzl._",
+        "abhinav__ct", "rashidaaa_x", "thxsni_thxnzz_", "axhvin__x", "zoor4j._",
+        "hessanna._", "nay.ne_soor.yah", "dhe__bilal", "its_.athul_", "__vinayak_vinu__",
+        "shaannuuhhh", "aana.nnyya", "kmc_wizard_ff", "karxxi._", "albedos_gaming",
+        "_mr_gr_ee_ns_", "jashirrhhh", "jaganath_p_chandran_", "a_lka._", "_vishnu_roopesh",
+        "yazir_storys", "sreerajhere", "aromal71", "midhunn_krish", "_captain_hyder_shadow_",
+        "jiyo_cj", "an.x.4", "akshay__m5_", "_kr111sh_", "clapcutmedia", "jinson_7",
+        "mr_kalmax_", "a_______dnan", "sleeve_mortal", "arrshhhh.__", "ab.hiiinv",
+        "dhanix__dxh", "mayush769", "pavvn.n", "m.afn4n._", "niba.ebrhm", "beee.pathuh",
+        "fari_t_s_2", "nandhu.karthi.11", "_ajayyy.y", "madan._.05", "_moon_rabbit12",
+        "harripriyaahhh", "harsh_henna", "nayannaa.___", "_sujiiiiithhh", "_vexcna_",
+        "mohd__shammas7", "_ananndu.kr", "sandeep_.caxrod", "kiaracallejanrdro_arts",
+        "_why_you_jump__", "kannannnhhhh", "salieeyyyy", "abhin.avhhh_", "f_i_da______",
+        "js_adharsh_93", "mr_d_a_k_a_r", "ansal_rahman_", "_ratheesh_7i", "axlu_071b",
+        "ar.adith_", "rahul_krishna__4", "muhddsiinan", "rishlaayy", "zo.kxnnxn",
+        "jassi.__.18", "nehaaa__popzzz", "adarsh_s___7", "__z_eb_aan__", "siiaann.faisl",
+        "tarkuti__.ajay", "navalrahman__", "tha__haaaa", "ziiyyaaannn", "scar_let__witch__",
+        "_.abhiyeeeee_", "far__.vi", "sreeja____vb", "vaish_navi_santhi", "z.inaan",
+        "_mr_armlet_", "insta_killer_sj", "h.abihhh", "fkn_ruok", "snehu___xo_",
+        "far_sanaa.__", "_naseeb_nass_", "red__pilot_46_", "i_m.athul", "dheeraj__dhee_",
+        "psilocybin__000", "dream_hunter_8824", "jerry_t_j", "_prajith_pf", "kb_2_0_0_0",
+        "anandu173", "zahl_shalu", "nooru1174", "subhi_in", "arjuunnn.__", "marlojordang",
+        "torque__b_o_y", "safeeq______________saf", "_scoutarnoldpd6wh", "_a._nu_",
+        "_jinshad_7", "_yousai", "mujiieee_", "adhwaiga_aiguuzz_official", "jit_w_hu_kerala",
+        "p_athuzz__._", "arty__9", "satheesh229218", "pra__v__.een", "saifa__sadi",
+        "_ya_hooh_", "crafty__pathuchh", "n.capturess", "jishad_zx", "_fly_by_93",
+        "_daa_nii", "arusssssssh", "noopa_bby", "chikk_x_", "trojan_airlines", "sooryyya",
+        "shyybann", "jishan__vlr", "sadhik__ak__", "hamid_luhar7727", "esme_kaikook",
+        "enrique_iglesias_.__", "spenex__e_", "ib_xhim", "anuraghhh._", "abdulmubaris",
+        "jerin_thmz", "sabarii_._", "miiiiinnaahh", "sejil___shad", "__deleted__bhiebecjhiacafgac",
+        "sehal_sayeer", "myroyal.fashion", "anas.farzeen", "_shana_binth_kabeer",
+        "ri__s__ha.__", "rinshh_.__", "naf_laah.__", "rinsha__zz__", "asla.jmshd",
+        "_.nibras._nx", "_swa_.liha_", "_f.idhaa_", "shebia_jebin", "__faihaaa.__",
+        "hibafathimhh_", "spotnclick", "shibin_24_jr", "zannahh_crafts", "shravani__298",
+        "_shahla_27", "xsk__y", "alllshhffa", "j08yyyy", "_hacker_zx_0_0_0_1",
+        "p.4chuz", "shahb.aaa__", "siddiqsidhu_", "jaslaa_zz", "__deleted__bhiebefchjfdefidi",
+        "_sree_46__", "jam___shiii", "iswaryaaah.__", "_shiffnahh", "sen._art_",
+        "najiya_fari", "_alaknandaa_", "faasilaaa._", "nidha.abdul", "ni_vedya_p_n_",
+        "sachhhu.in_", "_allen_saji__", "__ay_shaax__", "__sachu__zx_", "anagha.ravii",
+        "_the__crazy__girl_6", "aparna_bijuu", "athxl_x6_", "abhiram._rajeev", "jincy_joy07",
+        "anup_ama402", "avndhy.kahhhhhhh", "arjuuun_____", "_mhd_murshi", "_.na_fi_ha._",
+        "siiin4an", "h_ibaahh_", "ayshamehzzin", "shajila_shareef", "hamn__aaaa",
+        "_junaid__j", "minha._.riyas", "shahnnaa_", "fa.rzaahh", "sha.za___",
+        "safna_xzz", "fidhhh.ahh", "nejeeebaa", "_fida.h__", "rifa_arafath",
+        "nidha__hamza", "shibin.mhd_", "sabaa_._sakeer", "_arjjuunn__", "r.iiyyh",
+        "asneeeah", "shamilaaaaah", "nayana.aa_____", "nydhaa._", "s.affah", "ayshh.__hh",
+        "frhh.naaaa", "j_a_g_o._x", "shi_niyahh", "n1haal___", "mehrinzzz__",
+        "craft_angels999", "sooryaaahh__", "_fasna_z_x", "hid.aah_", "navnth_yx",
+        "anshidaa__.__", "f.sanaieee", "_sahiya_a", "_shaban.ahh__", "_rishuz_riyas",
+        "arshyyiie._", "_nabeel__c", "_anuhx.___", "rishaaaaaa.n", "meh._arin_",
+        "_jisanahh_", "jabiney._", "ft.hamnaaaa", "_fadhiya_salxxm", "fabeeee.e",
+        "afnan_____mhmd", "_aneesyyy_", "hamna__hnu", "a.nzy___", "nasriyaah___",
+        "femi_femx._", "shiibna", "troll_lokam_22", "niidhaee", "f._senaa", "fathh.maa___",
+        "shifnaaah.__", "najiyarafeeque", "re_mya_moh_an", "shhiimnah", "lijina__janardhanan",
+        "niihalaahh.__", "nafllaah._", "si_na____", "adhluz.__", "shahla.shrnn",
+        "swdqaa__marjjaan", "i.niiala", "fami_midha", "___.han.na.___", "asaru_07_",
+        "shaml.ah", "gadgets_one_malayalam_official", "liya.fz_", "_najyahh_",
+        "_unaii_saa", "_musnaa._", "sha__hanahh.__", "fathimaa.e", "hann.naa_",
+        "mubi_08._", "irfanaaahh.h", "_hibaahhhh__", "jiishad_jr", "huzayyfa._",
+        "_reemmhh_", "_shaanaa_a", "n_zmil", "_najiya__ali", "shamila.theslii",
+        "_mu_rsh_.1", "mappe.memes", "pachussssss_", "nsml.__", "fayis_junior____",
+        "lovely_ahmed47", "v__i___shnu", "____abhiyyy1", "ii.ameen__", "a.ji_t__h_",
+        "_p_h_o_e_n_i_x__", "billioners_club09", "__alannnnnnn___", "the_rev_matcher_kid",
+        "_ajayy__._", "mykyyyyeeee", "im.lavenderhhh", "anilbaria6355", "s_a___nuu___",
+        "_ajzx__", "hasina_azva__", "pranav.k.dinesh", "roshan_._17", "_yaz.een_",
+        "faariisshh", "adith.oxo", "the_gra_vi_ty", "falulu.haq", "athulkiran_",
+        "abhiieyy__", "sreeranj2021", "ziyaaah._h", "___adithyannnnn", "maanas390",
+        "nott.jish", "just.saxl", "_sree_kutty_2603", "kirrannnn", "jbn.rxj", "shh4dd",
+        "_midhlajhh", "kili___poyi", "k_a_n_t_hari", "its__me__lubaba__khan", "looya_katz",
+        "_sxchu_._x7", "_ra_h_ul_7", "rxi_nnx", "amarnath_toxic", "mr_fox___",
+        "gangenthh", "jerald_loyed", "_shhyam_", "anjo___10", "blue4light",
+        "_harshaaaaaaad_", "jamshi_xo", "anziicj", "ader.shh_", "ra_m_shu",
+        "suh_ail_22", "_aj._____", "_sahhll", "af.nuh", "_krishnajiith_", "nikxiiiiiiii",
+        "_ananthu.kr", "_pikaxxchu_", "__sid__hh", "_su__ha__i__x", "dhe_eraj___",
+        "vish_nuaswin", "adi.xn._", "alwin_joseph._", "__free_bird_0__",
+        "sangeerthana_krishnan__", "sarath.pq", "abdhu__z", "head_over_ads",
+        "dhe_mellu_", "sikhhiiillllll_"
+    ];
+
+    // 2. Function to create the list items
+    function populateList(userArray) {
+        const userList = document.getElementById('userList');
+        userList.innerHTML = ''; // Clear existing list
+
+        userArray.forEach(username => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('user-item');
+
+            const usernameSpan = document.createElement('span');
+            usernameSpan.classList.add('username');
+            usernameSpan.textContent = username;
+
+            // This is the core functionality: linking the button to the Instagram profile
+            const instagramUrl = `https://www.instagram.com/${username}/`;
+            const unfollowBtn = document.createElement('a');
+            unfollowBtn.href = instagramUrl;
+            unfollowBtn.target = '_blank'; // Open in new tab
+            unfollowBtn.classList.add('unfollow-btn');
+            unfollowBtn.textContent = 'Unfollow';
+
+            listItem.appendChild(usernameSpan);
+            listItem.appendChild(unfollowBtn);
+            userList.appendChild(listItem);
+        });
+    }
+
+    // 3. Function to filter the list based on search input
+    function searchUsers() {
+        const searchInput = document.getElementById('searchBar').value.toLowerCase();
+        const filteredUsers = usernames.filter(username => 
+            username.toLowerCase().includes(searchInput)
+        );
+        populateList(filteredUsers);
+    }
+
+    // Initialize the list when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        populateList(usernames);
+    });
+
+</script>
+
+</body>
+</html>
